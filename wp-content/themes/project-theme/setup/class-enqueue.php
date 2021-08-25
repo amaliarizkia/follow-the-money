@@ -129,6 +129,15 @@ class Enqueue {
 			true
 		);
 
+		/*enqueue ajax*/
+		wp_enqueue_script(
+			'handle-ajax-js',
+			THEME_URL.'/assets/js/src/themes/sequence/sequence.js',
+			['jquery'],
+			'auto',
+			true
+		);
+
 		$error_messages = [
 			'required'    => __( 'This field is required. Please be sure to check.', 'themedomain' ),
 			'email'       => __( 'Your E-mail address appears to be invalid. Please be sure to check.', 'themedomain' ),
@@ -151,6 +160,21 @@ class Enqueue {
 				'errorMessages' => $error_messages,
 			]
 		);
+
+		/*localize js ajax*/
+		wp_localize_script(
+			'handle-ajax-js','handleAjax', [
+				'ajaxUrl'		=> admin_url('admin-ajax.php'),
+				'themeUrl'		=> site_url(),
+				'ajx'			=> array(
+					'startEpisode' => array(
+						'action' => 'start_episode',
+						'nonce'	=> wp_create_nonce('StartEpisode')
+					)
+				)
+			]
+		);
+
 
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );
